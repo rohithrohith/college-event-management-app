@@ -13,8 +13,11 @@ const app = express()
 
 app.use( express.json() )
 app.use( express.urlencoded( { extended: false } ) )
-app.use( errorHandler )
 
-app.use( '/api/events/', require( './routes/routes' ) )
+app.use( '/api/events/', require( './routes/eventRoutes' ) )
+app.use( '/api/users/', require( './routes/userRoutes' ) )
+app.use( '/api/students/', require( './routes/studentRoutes' ) )
+
+app.use( errorHandler )
 
 app.listen( port, () => { console.log( "Server Started".cyan ) } )

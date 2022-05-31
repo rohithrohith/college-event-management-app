@@ -6,20 +6,22 @@ const Event = require( '../models/eventModel' )
 const getEvents = asyncHandler( async ( req, res ) => {
     const events = await Event.find()
 
+    console.log( req.user )
     res.status( 200 ).json( events )
 
 } )
 
 // @route PUT /api/events
 const insertEvent = asyncHandler( async ( req, res ) => {
-    if ( !req.body.title ) {
+    if ( !req.body.title || !req.body.description ) {
         res.status( 400 )
-        throw new Error( 'Please enter the title!' )
+        throw new Error( 'Please enter all attributes!' )
     }
     const event = await Event.create( {
-        title: req.body.title
+        title: req.body.title,
+        description: req.body.description
     } )
-    res.status( 200 ).json( event )
+    res.status( 201 ).json( event )
 } )
 
 // @route PUT /api/events/:id

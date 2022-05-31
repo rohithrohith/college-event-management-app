@@ -6,6 +6,10 @@ const eventSchema = mongoose.Schema(
             type: String,
             required: [true, 'Please add the title'],
         },
+        description: {
+            type: String,
+            required: [true, "Please provide the description"]
+        },
     },
     {
         timestamps: true
