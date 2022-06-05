@@ -1,0 +1,58 @@
+.add_form {
+	margin-top: 20px;
+}
+.form_data {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+}
+
+.form_label {
+	display: block;
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+.form_input {
+	width: 350px;
+	height: 40px;
+	border: none;
+	outline: none;
+	border-bottom: var(--dark) 1px solid;
+	padding: 5px;
+	background: rgb(239, 239, 239);
+}
+
+.select_input {
+	height: 40px;
+	padding: 5px;
+	border: none;
+	outline: none;
+	border-bottom: var(--dark) 1px solid;
+	background: rgb(239, 239, 239);
+	width: 350px;
+}
+
+.select_option {
+	color: var(--dark);
+	background: white;
+}
+
+.form_btn {
+	padding: 10px;
+	background: var(--dark);
+	border-radius: 5px;
+	margin-top: 20px;
+	outline: none;
+	border: none;
+	color: var(--light);
+	font-size: 16px;
+	border-radius: 2px;
+	border: var(--dark) 1px solid;
+	cursor: pointer;
+}
+
+.form_btn:hover {
+	background: white;
+	color: var(--dark);
+}

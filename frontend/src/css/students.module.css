@@ -1,0 +1,87 @@
+/* New Student Styles */
+.new_student {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 5px 10px;
+	border: rgba(0, 0, 0, 0.4) solid 1px;
+	border-radius: 5px;
+}
+
+.student_actions {
+	display: flex;
+	align-items: center;
+}
+
+.action_btn {
+	padding: 10px;
+	cursor: pointer;
+	margin: 0 5px;
+	background: none;
+	border: none;
+	outline: none;
+	border-radius: 5px;
+}
+
+.accept_btn {
+	background: green;
+	color: white;
+}
+
+.accept_btn:hover {
+	background: rgb(0, 82, 0);
+}
+
+.reject_btn {
+	background: rgb(166, 0, 0);
+	color: white;
+}
+
+.reject_btn:hover {
+	background: rgb(224, 0, 0);
+}
+
+/* Old Student */
+
+.student_action_btn {
+	display: flex;
+	align-items: center;
+}
+
+.student {
+	padding: 5px 10px;
+	border: rgba(0, 0, 0, 0.4) solid 1px;
+	border-radius: 5px;
+}
+
+.student_head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.student_action_btn {
+	background: var(--dark);
+	color: white;
+}
+
+.events_list {
+	list-style-type: none;
+	margin-top: 5px;
+	padding: 5px 0;
+	border-top: 1px solid var(--dark);
+}
+
+.participated_events {
+	max-height: 0;
+	overflow: hidden;
+}
+
+.show_participated_events {
+	max-height: 700px;
+}
+
+.participated_event {
+	font-size: 14px;
+	text-decoration: underline;
+}

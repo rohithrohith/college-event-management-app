@@ -1,0 +1,33 @@
+.navbar-container {
+	background: white;
+	border-bottom: 1px solid #cbcbcb;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+
+.nav-list {
+	list-style-type: none;
+	display: flex;
+}
+
+.nav-item {
+	margin: 0 10px;
+}
+
+.link {
+	font-size: 14px;
+}
+
+.link:hover {
+	color: var(--primary);
+}
+
+.navbar {
+	padding: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	max-width: 1200px;
+	margin: 0 auto;
+}

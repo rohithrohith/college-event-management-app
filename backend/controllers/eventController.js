@@ -6,7 +6,6 @@ const Event = require( '../models/eventModel' )
 const getEvents = asyncHandler( async ( req, res ) => {
     const events = await Event.find()
 
-    console.log( req.user )
     res.status( 200 ).json( events )
 
 } )
