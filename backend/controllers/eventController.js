@@ -5,20 +5,22 @@ const Event = require( '../models/eventModel' )
 // @route GET /api/events
 const getEvents = asyncHandler( async ( req, res ) => {
     const events = await Event.find()
-
-    res.status( 200 ).json( events )
+    res.status( 200 ).json( { events, user: req.user } )
 
 } )
 
 // @route PUT /api/events
 const insertEvent = asyncHandler( async ( req, res ) => {
-    if ( !req.body.title || !req.body.description ) {
+    const { title, description, eventOn, lastDate } = req.body
+    if ( !title || !description || !eventOn || !lastDate ) {
         res.status( 400 )
         throw new Error( 'Please enter all attributes!' )
     }
     const event = await Event.create( {
-        title: req.body.title,
-        description: req.body.description
+        title,
+        description,
+        eventOn,
+        lastDate
     } )
     res.status( 201 ).json( event )
 } )
@@ -48,9 +50,21 @@ const deleteEvent = asyncHandler( async ( req, res ) => {
     res.json( { id: `${req.params.id}` } )
 } )
 
+const getOneEvent = asyncHandler( async ( req, res ) => {
+    try {
+        const event = await Event.findById( req.params.id )
+        res.status( 200 ).json( event )
+    } catch ( err ) {
+        res.status( 404 )
+        throw new Error( "Event not found" )
+    }
+
+} )
+
 module.exports = {
     getEvents,
     insertEvent,
     updateEvent,
-    deleteEvent
+    deleteEvent,
+    getOneEvent
 }

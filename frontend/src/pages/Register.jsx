@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import styles from '../css/landing.module.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useDispatch, connect } from 'react-redux';
+import { registerStudent } from '../actions/authActions';
+import { displayMsg } from '../utils';
 
 function Register() {
 	const [formData, setFormData] = useState({
@@ -8,19 +11,29 @@ function Register() {
 		email: '',
 		password: '',
 		confirmPassword: '',
+		branch: '-select-',
 	});
 
-	const { name, email, password, confirmPassword } = formData;
+	const dispatch = useDispatch();
+
+	const { name, email, password, confirmPassword, branch } = formData;
 
 	const change = (e) => {
 		setFormData((prevState) => ({
 			...prevState,
 			[e.target.name]: e.target.value,
 		}));
+		console.log(formData);
 	};
 
 	const submit = (e) => {
 		e.preventDefault();
+		if (formData.password !== formData.confirmPassword)
+			displayMsg("Passwords doesn't match");
+		else {
+			dispatch(registerStudent(formData));
+		}
+		console.log(formData);
 	};
 
 	const studentRegisterForm = (
@@ -89,6 +102,56 @@ function Register() {
 						required
 					/>
 				</div>
+				<div className={styles.form_data}>
+					<label
+						htmlFor='student-confirm-password'
+						className={styles.form_label}
+					>
+						Branch
+					</label>
+					<select
+						onChange={change}
+						name='branch'
+						id='branch'
+						defaultValue={branch}
+						required
+						className={styles.select_input}
+					>
+						<option className={styles.select_option} value=''>
+							-Select-
+						</option>
+						<option className={styles.select_option} value='CSE'>
+							CSE
+						</option>
+						<option className={styles.select_option} value='ISE'>
+							ISE
+						</option>
+						<option className={styles.select_option} value='ECE'>
+							ECE
+						</option>
+						<option className={styles.select_option} value='ME'>
+							ME
+						</option>
+						<option className={styles.select_option} value='AE'>
+							AE
+						</option>
+						<option className={styles.select_option} value='MT'>
+							MT
+						</option>
+						<option className={styles.select_option} value='EEE'>
+							EEE
+						</option>
+						<option className={styles.select_option} value='AI/ML'>
+							AI/ML
+						</option>
+						<option className={styles.select_option} value='CIV'>
+							CIV
+						</option>
+						<option className={styles.select_option} value='MI'>
+							MI
+						</option>
+					</select>
+				</div>
 				<input
 					type='submit'
 					value='Register'
@@ -121,4 +184,4 @@ function Register() {
 	);
 }
 
-export default Register;
+export default connect(null, { registerStudent })(Register);

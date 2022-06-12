@@ -20,6 +20,14 @@ const studentSchema = mongoose.Schema( {
         type: Boolean,
         default: false
     },
+    role: {
+        type: String,
+        default: "student"
+    },
+    isApproved: {
+        type: Boolean,
+        default: false
+    },
     participatedEvents: {
         type: [mongoose.Schema.Types.ObjectId],
         default: []

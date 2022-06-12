@@ -3,6 +3,7 @@ const jwt = require( 'jsonwebtoken' )
 const bcrypt = require( 'bcryptjs' )
 
 const User = require( '../models/userModel' )
+const studentModel = require( '../models/studentModel' )
 
 // @route POST /api/users/
 // @desc  Register new users
@@ -66,9 +67,26 @@ const loginUser = asyncHandler( async ( req, res ) => {
     }
 } )
 
+// @route POST /api/users/approve/:email
+// @desc  Approve students
+const approveStudent = asyncHandler( async ( req, res ) => {
+    const { email } = req.params
+    const updatedStudent = studentModel.findOneAndUpdate( { email }, { isApproved: true } )
+    if ( !updatedStudent ) {
+        res.status( 400 )
+        throw new Error( 'Something went wrong, try again later' )
+    }
+    res.status( 200 ).send( 'Student approved' )
+} )
+
 const getProfile = asyncHandler( async ( req, res ) => {
-    const { _id, name, email } = await User.findById( req.user.id )
-    res.status( 200 ).json( { id: _id, name, email } )
+    console.log( req.user.id )
+    let user = await User.findById( req.user.id )
+    if ( user ) {
+        res.status( 200 ).json( { id: user._id, name: user.name, email: user.email, role: user.role } )
+    }
+    user = await studentModel.findById( req.user.id )
+    res.status( 200 ).json( { id: user._id, name: user.name, email: user.email, isVerified: user.isVerified, isApproved: user.isApproved, role: user.role } )
 } )
 
 const generateToken = ( id ) => {
@@ -78,5 +96,6 @@ const generateToken = ( id ) => {
 module.exports = {
     registerUser,
     loginUser,
-    getProfile
+    getProfile,
+    approveStudent
 }

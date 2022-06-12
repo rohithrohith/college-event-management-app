@@ -1,0 +1,6 @@
+export const STORE_USER = 'STORE_USER'
+export const VERIFY_OTP = 'VERIFY_OTP'
+export const FETCH_EVENTS = 'FETCH_EVENTS'
+export const FETCH_EVENT = 'FETCH_EVENT'
+export const GET_USER = 'GET_STUDENT'
+export const REGISTER_STUDENT = 'REGISTER_STUDENT'

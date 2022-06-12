@@ -1,15 +1,34 @@
 import styles from '../css/landing.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { signinUser } from '../actions/authActions';
+import { connect, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { sendOtpMail } from '../utils';
 
 function Landing() {
+	const userData = useSelector((state) => state.user.signedIn);
+	const navigate = useNavigate();
+
 	const [formData, setFormData] = useState({
 		email: '',
 		password: '',
 		role: 'student',
 	});
+	const dispatch = useDispatch();
 
 	const { email, password, role } = formData;
+
+	useEffect(() => {
+		if (userData.isVerified === true) {
+			localStorage.setItem('token', userData.token);
+			localStorage.setItem('userName', userData.name);
+			navigate(`/home/`);
+		} else if (userData.isVerified === false) {
+			sendOtpMail(userData.email);
+			navigate(`/verify/${userData.email}`);
+		}
+	}, [userData.isVerified]);
 
 	const change = (e) => {
 		setFormData((prevState) => ({
@@ -18,8 +37,9 @@ function Landing() {
 		}));
 	};
 
-	const submit = (e) => {
+	const submit = async (e) => {
 		e.preventDefault();
+		dispatch(signinUser(formData));
 	};
 
 	const changeToFacultySignin = () => {
@@ -98,20 +118,23 @@ function Landing() {
 					value='Student Sign In'
 					id='student-signin-btn'
 					className={styles.form_btn}
-					// onClick={studentSubmit}
 				/>
 				<input
 					type='submit'
 					value='Faculty Sign In'
 					id='faculty-signin-btn'
 					className={`${styles.form_btn} ${styles.faculty_signin_btn}`}
-					// onClick={facultySubmit}
 				/>
 			</form>
 		</div>
 	);
 	return (
 		<div style={{ height: '100%' }}>
+			<div className={styles.error_messages} id='err-msg-container'>
+				<div className={styles.error_msg} id='err-msg'>
+					Error
+				</div>
+			</div>
 			<div className={styles.top_header}>
 				<Link to='/home' className={styles.appname}>
 					College Event management
@@ -152,4 +175,4 @@ function Landing() {
 	);
 }
 
-export default Landing;
+export default connect(null, { signinUser })(Landing);

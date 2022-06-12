@@ -35,3 +35,15 @@ a {
 	margin: 0 auto;
 	padding-top: 70px;
 }
+
+.msg-container {
+	position: absolute;
+	display: none;
+	background: var(--dark);
+	font-size: 14px;
+	color: white;
+	padding: 10px;
+	border-radius: 5px;
+	bottom: 20px;
+	left: 20px;
+}
