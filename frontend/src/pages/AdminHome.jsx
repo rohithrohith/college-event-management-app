@@ -1,7 +1,19 @@
 import s from '../css/adminHome.module.css';
-import EventTable from '../components/EventTable';
+import AdminEvent from '../components/AdminEventRow';
+import { useEffect } from 'react';
+import { useSelector, useDispatch, connect } from 'react-redux';
+import { getEvents } from '../actions/eventsActions';
 
 function AdminHome() {
+	const events = useSelector((state) => state.events.events);
+	const dispatch = useDispatch();
+
+	let sl = 0;
+
+	useEffect(() => {
+		dispatch(getEvents());
+	}, []);
+
 	const sort = (e) => {
 		console.log(e.target.value);
 	};
@@ -29,9 +41,19 @@ function AdminHome() {
 					</select>
 				</div>
 			</div>
-			<EventTable style={s} />
+			<div className={s.event_list_container}>
+				<div className={s.event_list_head}>
+					<span className={s.column}>Sl.no</span>
+					<span className={s.column}>Title</span>
+					<span className={s.column}>Actions</span>
+				</div>
+				{events &&
+					events.map((event) => (
+						<AdminEvent style={s} event={event} sl={sl + 1} key={event._id} />
+					))}
+			</div>
 		</div>
 	);
 }
 
-export default AdminHome;
+export default connect(null, { getEvents })(AdminHome);

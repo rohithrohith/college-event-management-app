@@ -9,6 +9,7 @@ const protect = asyncHandler( async ( req, res, next ) => {
     if ( req.headers.authorization && req.headers.authorization.startsWith( "Bearer" ) ) {
         try {
             token = req.headers.authorization.split( " " )[1]
+
             const decodedToken = jwt.verify( token, process.env.JWT_SECRET )
 
             let user = await User.findById( decodedToken.id ).select( "-password" )
@@ -19,15 +20,13 @@ const protect = asyncHandler( async ( req, res, next ) => {
 
             next()
         } catch ( err ) {
-            console.log( err )
             res.status( 401 )
             throw new Error( "Not authorized!" )
         }
-    }
-
-    if ( !token ) {
-        res.status( 401 )
-        throw new Error( "Not authorized! Sign In" )
+        if ( !token ) {
+            res.status( 401 )
+            throw new Error( "Not authorized! Please sign In" )
+        }
     }
 } )
 

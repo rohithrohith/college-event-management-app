@@ -1,6 +1,8 @@
 const asyncHandler = require( 'express-async-handler' )
 
 const Event = require( '../models/eventModel' )
+const EventParticipants = require( '../models/eventParticipantModel' )
+const Student = require( '../models/studentModel' )
 
 // @route GET /api/events
 const getEvents = asyncHandler( async ( req, res ) => {
@@ -20,7 +22,7 @@ const insertEvent = asyncHandler( async ( req, res ) => {
         title,
         description,
         eventOn,
-        lastDate
+        lastDate,
     } )
     res.status( 201 ).json( event )
 } )
@@ -61,10 +63,33 @@ const getOneEvent = asyncHandler( async ( req, res ) => {
 
 } )
 
+const participate = asyncHandler( async ( req, res ) => {
+    const { eventId, branch } = req.body
+    const userId = req.user.id
+    const student = await Student.findById( userId )
+    if ( !student ) {
+        res.status( 400 )
+        throw new Error( "Only students can participate!" )
+    }
+    let participate = await EventParticipants.findOne( { userId } )
+    if ( participate ) {
+        res.status( 400 )
+        throw new Error( "Already participating!" )
+    }
+    participate = await EventParticipants.create( { eventId, userId, branch } )
+    const { title, _id, eventOn, lastDate, participants } = await Event.findById( eventId ).select( "-description" )
+    const updatedEvent = { ...participants, total: participants.total + 1, [`${branch}`]: participants[`${branch}`] == null ? 1 : participants[`${branch}`] + 1 }
+    const addPartcipation = await Event.findByIdAndUpdate( eventId, { participants: updatedEvent }, { new: true } )
+    const updateStudent = await Student.findByIdAndUpdate( userId, { $push: { participatedEvents: { $each: [{ title, id: _id, eventOn, lastDate }] } } } )
+    res.status( 200 ).json( participate )
+
+} )
+
 module.exports = {
     getEvents,
     insertEvent,
     updateEvent,
     deleteEvent,
-    getOneEvent
+    getOneEvent,
+    participate
 }

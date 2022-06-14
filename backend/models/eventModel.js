@@ -10,6 +10,12 @@ const eventSchema = mongoose.Schema(
             type: String,
             required: [true, "Please provide the description"]
         },
+        participants: {
+            type: Object,
+            default: {
+                total: 0
+            }
+        },
         lastDate: {
             type: Date,
             required: [true, "Please provide last date to register"]

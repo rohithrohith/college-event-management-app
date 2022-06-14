@@ -3,14 +3,20 @@ import { Link } from 'react-router-dom';
 import '../css/navbar.css';
 import { useEffect } from 'react';
 import { useSelector, useDispatch, connect } from 'react-redux';
-import { getStudent } from '../actions/authActions';
+import { getUser } from '../actions/authActions';
 
 function Navbar() {
 	const user = useSelector((state) => state.user.currentUser);
 	const dispatch = useDispatch();
 	useEffect(() => {
-		dispatch(getStudent());
+		dispatch(getUser());
 	}, []);
+
+	const logout = () => {
+		localStorage.removeItem('token');
+		localStorage.removeItem('userName');
+		window.location.pathname = '/';
+	};
 
 	const toggleLogout = () => {
 		document.getElementById('logout').classList.toggle('show-logout');
@@ -33,14 +39,14 @@ function Navbar() {
 				</div>
 				<div className='navbar-right'>
 					<ul className='nav-list'>
-						{user && user.role === 'moderator' && (
+						{user && user.role === 'MODERATOR' && (
 							<li className='nav-item'>
-								<Link to='/register' className='link'>
+								<Link to='/students' className='link'>
 									Students
 								</Link>
 							</li>
 						)}
-						{user && user.role === 'admin' && (
+						{user && user.role === 'ADMIN' && (
 							<>
 								<li className='nav-item'>
 									<Link to='/register' className='link'>
@@ -54,10 +60,10 @@ function Navbar() {
 								</li>
 							</>
 						)}
-						{user && user.role === 'student' && (
+						{user && user.role === 'STUDENT' && (
 							<>
 								<li className='nav-item'>
-									<Link to='/register' className='link'>
+									<Link to='/participated' className='link'>
 										Participated events
 									</Link>
 								</li>
@@ -77,10 +83,18 @@ function Navbar() {
 													marginRight: '5px',
 												}}
 											/>
+											<span style={{ margin: '2px 0', display: 'block' }}>
+												{user && user.role}
+											</span>
 											<hr />
-											<Link to='/register' className='logout-link'>
+											<button
+												type='button'
+												to='/register'
+												className='logout-btn'
+												onClick={logout}
+											>
 												Logout
-											</Link>
+											</button>
 										</div>
 									</div>
 								</li>
@@ -93,4 +107,4 @@ function Navbar() {
 	);
 }
 
-export default connect(null, { getStudent })(Navbar);
+export default connect(null, { getUser })(Navbar);

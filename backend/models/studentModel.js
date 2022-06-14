@@ -22,14 +22,13 @@ const studentSchema = mongoose.Schema( {
     },
     role: {
         type: String,
-        default: "student"
+        default: "STUDENT"
     },
     isApproved: {
         type: Boolean,
         default: false
     },
     participatedEvents: {
-        type: [mongoose.Schema.Types.ObjectId],
         default: []
     },
 }, {

@@ -57,6 +57,8 @@ const getStudents = asyncHandler( async ( req, res ) => {
     res.status( 200 ).json( students )
 } )
 
+// @route POST /api/students/login/
+// @desc  Verify student account email
 const loginStudent = asyncHandler( async ( req, res ) => {
     const { email, password } = req.body
     if ( !email || !password ) {
@@ -85,14 +87,18 @@ const loginStudent = asyncHandler( async ( req, res ) => {
     }
 } )
 
+
 const getProfile = asyncHandler( async ( req, res ) => {
     const { _id, name, email } = await Student.findById( req.user.id )
     res.status( 200 ).json( { id: _id, name, email } )
 } )
 
+// @route PUT /api/students/verify/:email
+// @desc  Verify student account email
 const verifyStudent = asyncHandler( async ( req, res ) => {
     const { otp } = req.body
     const { email } = req.params
+    console.log( otp )
 
     const otpDetails = await SentOtp.findOne( { email } )
     if ( !otpDetails ) {
@@ -153,11 +159,71 @@ const sendOtp = asyncHandler( async ( req, res ) => {
 
 } )
 
+// @route GET /api/students/branch/:branch
+// @desc  Get all Students of the branch
+const getBranchStudents = asyncHandler( async ( req, res ) => {
+    const { branch } = req.params
+    try {
+        const approvedStudents = await Student.find( { branch: branch.toUpperCase(), isApproved: true } )
+        const notYetApprovedStudents = await Student.find( { branch: branch.toUpperCase(), isApproved: false } )
+        if ( approvedStudents && notYetApprovedStudents )
+            res.json( { approvedStudents, notYetApprovedStudents } )
+    } catch ( err ) {
+        res.status( 400 )
+        throw new Error( "Something went wrong! try again later" )
+    }
+
+} )
+
+// @route PUT /api/students/approve/:id
+// @desc  Approve students
+const approveStudent = asyncHandler( async ( req, res ) => {
+    const { id } = req.params
+    try {
+        const student = await Student.findById( id )
+    } catch ( err ) {
+        res.status( 400 )
+        throw new Error( "Student account doesn't exists" )
+    }
+    const updatedStudent = await Student.findByIdAndUpdate( id, { isApproved: true }, { new: true } ).select( "-password" )
+    if ( !updatedStudent ) {
+        res.status( 400 )
+        throw new Error( 'Something went wrong, try again later' )
+    } else {
+        const { email, name, isApproved, role, isVerified } = updatedStudent
+        res.status( 200 ).json( { email, name, isApproved, role, isVerified } )
+    }
+
+} )
+
+const rejectStudent = asyncHandler( async ( req, res ) => {
+    const { id } = req.params
+    let rejectedStudent = null
+    try {
+        rejectedStudent = await Student.findById( id )
+        if ( !rejectedStudent ) {
+            res.status( 400 )
+            throw new Error( "Student account doesn't exists" )
+        }
+        if ( rejectedStudent.isApproved ) {
+            res.status( 400 )
+            throw new Error( "Student already has been approved, can not reject!" )
+        }
+        rejectedStudent = await Student.findByIdAndDelete( id )
+    } catch ( err ) {
+        res.status( 400 )
+        throw new Error( err.message )
+    }
+} )
+
 module.exports = {
     registerStudent,
     getStudents,
     loginStudent,
     getProfile,
     sendOtp,
-    verifyStudent
+    verifyStudent,
+    approveStudent,
+    getBranchStudents,
+    rejectStudent,
 }

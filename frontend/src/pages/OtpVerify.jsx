@@ -36,7 +36,8 @@ function OtpVerify() {
 	const submitOtp = (e) => {
 		e.preventDefault();
 		const enteredOtp = parseInt(`${otp.otp1}${otp.otp2}${otp.otp3}${otp.otp4}`);
-		dispatch(verifyStudent(enteredOtp, window.location.pathname.split('/')[2]));
+		const email = window.location.pathname.split('/')[2];
+		dispatch(verifyStudent(enteredOtp, email));
 	};
 	return (
 		<>

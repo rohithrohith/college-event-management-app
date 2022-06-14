@@ -20,14 +20,22 @@ function Landing() {
 	const { email, password, role } = formData;
 
 	useEffect(() => {
-		if (userData.isVerified === true) {
+		if (
+			userData.isVerified === true &&
+			(userData.role === 'STUDENT' || userData.role === 'MODERATOR')
+		) {
 			localStorage.setItem('token', userData.token);
 			localStorage.setItem('userName', userData.name);
 			navigate(`/home/`);
+		} else if (userData.isVerified === true && userData.role === 'ADMIN') {
+			localStorage.setItem('token', userData.token);
+			localStorage.setItem('userName', userData.name);
+			navigate(`/admin/`);
 		} else if (userData.isVerified === false) {
 			sendOtpMail(userData.email);
 			navigate(`/verify/${userData.email}`);
 		}
+		console.log('userdata', userData);
 	}, [userData.isVerified]);
 
 	const change = (e) => {
@@ -49,8 +57,6 @@ function Landing() {
 		document
 			.getElementById('faculty-category-btn')
 			.classList.add(`${styles.active}`);
-		document.getElementById('student-signin-btn').style.display = 'none';
-		document.getElementById('faculty-signin-btn').style.display = 'block';
 		document.querySelector('#foot-link').textContent = '';
 		setFormData((prevState) => ({
 			...prevState,
@@ -65,8 +71,6 @@ function Landing() {
 		document
 			.getElementById('student-category-btn')
 			.classList.add(`${styles.active}`);
-		document.getElementById('faculty-signin-btn').style.display = 'none';
-		document.getElementById('student-signin-btn').style.display = 'block';
 		document.querySelector(
 			'#foot-link'
 		).textContent = `Doesn't have an account? Sign Up`;
@@ -115,15 +119,9 @@ function Landing() {
 				</Link>
 				<input
 					type='submit'
-					value='Student Sign In'
+					value='Sign In'
 					id='student-signin-btn'
 					className={styles.form_btn}
-				/>
-				<input
-					type='submit'
-					value='Faculty Sign In'
-					id='faculty-signin-btn'
-					className={`${styles.form_btn} ${styles.faculty_signin_btn}`}
 				/>
 			</form>
 		</div>

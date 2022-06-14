@@ -12,6 +12,8 @@
 
 .register_btn {
 	display: block;
+	background: white;
+	cursor: pointer;
 	padding: 10px;
 	width: fit-content;
 	font-size: 14px;

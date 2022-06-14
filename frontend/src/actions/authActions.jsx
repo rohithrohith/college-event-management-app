@@ -34,6 +34,7 @@ export const verifyStudent = (otp, email) => async (dispatch) => {
 	let res;
 	try {
 		res = await axios.put(API_URI + 'verify/' + email, { otp });
+		console.log(otp, email);
 		const data = res.data;
 		dispatch({ type: VERIFY_OTP, data });
 	} catch (err) {
@@ -50,26 +51,26 @@ export const verifyStudent = (otp, email) => async (dispatch) => {
 export const registerStudent = (data) => async (dispatch) => {
 	try {
 		const res = await axios.post(API_URI, data);
-		console.log(res.data);
 		window.location.pathname = '/';
 	} catch (err) {
 		console.log(err);
 	}
 };
 
-export const getStudent = () => async (dispatch) => {
+export const getUser = () => async (dispatch) => {
 	try {
 		const res = await axios.get('http://localhost:5500/api/users/profile', {
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem('token')}`,
 			},
 		});
-		dispatch({ type: GET_USER, student: res.data });
+		dispatch({ type: GET_USER, user: res.data });
 	} catch (err) {
-		if (err.response.data.message === 'Not authorized!') {
-			displayMsg(err.response.data.message);
-			window.location.pathname = '/';
-		}
-		displayMsg(err.response.data.message);
+		// if (err.response.data.message === 'Not authorized!') {
+		// 	displayMsg(err.response.data.message);
+		// 	window.location.pathname = '/';
+		// }
+		// displayMsg(err.response.data.message);
+		console.log(err);
 	}
 };

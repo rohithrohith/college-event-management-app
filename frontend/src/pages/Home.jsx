@@ -17,17 +17,18 @@ function Home() {
 		<div style={{ height: '100%' }}>
 			<h2>Recent events</h2>
 
-			{user && user.role === 'student' && user.isApproved && (
+			{user && user.role === 'STUDENT' && user.isApproved && (
 				<>
 					<div className={s.recent_events}>
 						{events &&
 							events.map((event) => (
 								<Event style={s} event={event} key={event._id} />
 							))}
+						{!events && <h2>Loading...</h2>}
 					</div>
 				</>
 			)}
-			{user && user.role === 'student' && !user.isApproved && (
+			{user && user.role === 'STUDENT' && !user.isApproved && (
 				<>
 					<div
 						style={{
@@ -50,13 +51,14 @@ function Home() {
 					</div>
 				</>
 			)}
-			{user && user.role === 'moderator' && (
+			{user && user.role === 'MODERATOR' && (
 				<>
 					<div className={s.recent_events}>
 						{events &&
 							events.map((event) => (
 								<Event style={s} event={event} key={event._id} />
 							))}
+						{!events && <h2>Loading...</h2>}
 					</div>
 				</>
 			)}

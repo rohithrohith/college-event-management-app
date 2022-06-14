@@ -1,10 +1,18 @@
 /* New Student Styles */
+.new_students_section,
+.approved_sudent_section {
+	margin-top: 10px;
+	border-radius: 5px;
+	box-shadow: 1px 1px 8px 0px rgba(0, 0, 0, 0.4);
+	padding: 10px;
+}
+
 .new_student {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	padding: 5px 10px;
-	border: rgba(0, 0, 0, 0.4) solid 1px;
+	border: grey 1px solid;
 	border-radius: 5px;
 }
 
@@ -41,6 +49,21 @@
 	background: rgb(224, 0, 0);
 }
 
+.student,
+.new_student {
+	margin: 10px 0;
+	background: white;
+}
+
+.student_details {
+	display: flex;
+	align-items: center;
+}
+
+span {
+	display: block;
+}
+
 /* Old Student */
 
 .student_action_btn {
@@ -50,7 +73,7 @@
 
 .student {
 	padding: 5px 10px;
-	border: rgba(0, 0, 0, 0.4) solid 1px;
+	border: grey 1px solid;
 	border-radius: 5px;
 }
 

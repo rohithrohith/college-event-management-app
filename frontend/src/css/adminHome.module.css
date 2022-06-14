@@ -63,23 +63,77 @@
 	overflow: hidden;
 	font-size: 14px;
 	text-overflow: ellipsis;
+	font-weight: bold;
 }
 
 .event_link:hover {
 	text-decoration: underline;
-	font-weight: bold;
 }
 
 .stats_btn {
 	padding: 5px;
 	cursor: pointer;
 	margin: 0 2px;
-	color: white;
 	border-radius: 2px;
 	border: var(--dark) 0.5px solid;
-	background: var(--dark);
+	display: flex;
+	align-items: center;
+}
+
+.action_icon {
+	margin-right: 5px;
 }
 
 .stats_btn:hover {
-	color: var(--primary);
+	color: var(--light);
+	background: var(--dark);
+}
+
+/* Stats card */
+.stats_container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	display: none;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.stats_card {
+	background: white;
+	width: 90%;
+	border-radius: 10px;
+	display: grid;
+	grid-template-rows: 50px auto 50px;
+	padding: 10px;
+	height: 90%;
+}
+
+.stats_header,
+.stats_footer {
+	display: flex;
+	align-items: center;
+}
+
+.stats_card_title {
+	width: 50vw;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.stats_header {
+	border-bottom: 2px solid grey;
+	justify-content: space-between;
+}
+
+.stats_body {
+	padding: 10px 0;
+}
+
+.stats_footer {
+	border-top: 2px solid grey;
 }

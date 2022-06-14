@@ -20,12 +20,29 @@ const initState = {
 		role: null,
 		isVerified: null,
 		isApproved: null,
+		branch: null,
 	},
 };
 
 const authReducer = (state = initState, action) => {
 	switch (action.type) {
 		case STORE_USER: {
+			if (
+				action.accountData.role === 'MODERATOR' ||
+				action.accountData.role === 'ADMIN'
+			) {
+				const newState = {
+					...state,
+					signedIn: {
+						name: action.accountData.name,
+						email: action.accountData.email,
+						role: action.accountData.role,
+						isVerified: true,
+						token: action.accountData.token,
+					},
+				};
+				return newState;
+			}
 			const newState = {
 				...state,
 				signedIn: {
@@ -46,15 +63,21 @@ const authReducer = (state = initState, action) => {
 			return newState;
 		}
 		case GET_USER: {
-			console.log(action.student);
 			const newState = {
 				...state,
 				currentUser: {
-					name: action.student.name,
-					email: action.student.email,
-					role: action.student.role,
-					isVerified: action.student.isVerified,
-					isApproved: action.student.isApproved,
+					name: action.user.name,
+					email: action.user.email,
+					role: action.user.role,
+					isVerified: action.user.isVerified,
+					isApproved: action.user.isApproved,
+					branch: action.user.branch,
+					participatedEvents:
+						action.user.role === 'STUDENT'
+							? action.user.participatedEvents.length !== 0
+								? action.user.participatedEvents
+								: null
+							: null,
 				},
 			};
 			return newState;
