@@ -8,6 +8,10 @@ const eventParticipantsSchema = mongoose.Schema( {
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         required: [true, "Provide event-ID"]
+    },
+    eventOn: {
+        type: Date,
+        required: [true, "Provide event date"]
     }
 } )
 

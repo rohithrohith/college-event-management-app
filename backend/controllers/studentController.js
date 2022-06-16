@@ -1,9 +1,18 @@
 const asyncHandler = require( 'express-async-handler' )
 const jwt = require( 'jsonwebtoken' )
 const bcrypt = require( 'bcryptjs' )
+const nodemailer = require( 'nodemailer' )
 
 const SentOtp = require( "../models/otpModel" )
 const Student = require( '../models/studentModel' )
+const mailTransporter = nodemailer.createTransport( {
+    service: "gmail",
+    auth: {
+        user: process.env.FROM_EMAIL,
+        pass: process.env.EMAIL_PASS
+    }
+} )
+
 
 function generateOTP() {
     const digits = '0123456789'
@@ -19,7 +28,16 @@ function generateOTP() {
 }
 
 function sendOtpMail( email, otp ) {
-    console.log( email, otp )
+    console.log( otp )
+    const mailContent = `<div style="padding:10px;border-radius:5px;box-shadow:1px 1px 8px 1px rgba(0,0,0,0.3);"><h1 style="text-align:center;">Here is your One Time Password</h1><h2 style="text-align:center;">To verify your E-mail</h2><h1 style="text-align:center;color:grey">${otp}</h1></div>
+        `
+    const mailOptions = {
+        from: `College Event Management <${process.env.FROM_EMAIL}>`,
+        to: email,
+        subject: 'Verify your E-mail',
+        html: mailContent
+    }
+    // mailTransporter.sendMail( mailOptions )
 }
 
 const registerStudent = asyncHandler( async ( req, res ) => {
@@ -73,10 +91,11 @@ const loginStudent = asyncHandler( async ( req, res ) => {
         throw new Error( "Account does not exists!" )
     }
     if ( student && ( await bcrypt.compare( password, student.password ) ) ) {
-        res.status( 201 ).json( {
+        res.status( 200 ).json( {
             _id: student.id,
             name: student.name,
             email: student.email,
+            role: student.role,
             branch: student.branch,
             isVerified: student.isVerified,
             token: jwt.sign( { id: student.id }, process.env.JWT_SECRET, { expiresIn: '1d' } )
@@ -98,7 +117,6 @@ const getProfile = asyncHandler( async ( req, res ) => {
 const verifyStudent = asyncHandler( async ( req, res ) => {
     const { otp } = req.body
     const { email } = req.params
-    console.log( otp )
 
     const otpDetails = await SentOtp.findOne( { email } )
     if ( !otpDetails ) {

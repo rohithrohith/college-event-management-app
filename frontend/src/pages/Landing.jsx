@@ -35,8 +35,7 @@ function Landing() {
 			sendOtpMail(userData.email);
 			navigate(`/verify/${userData.email}`);
 		}
-		console.log('userdata', userData);
-	}, [userData.isVerified]);
+	}, [userData]);
 
 	const change = (e) => {
 		setFormData((prevState) => ({

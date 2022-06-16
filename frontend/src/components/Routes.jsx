@@ -7,7 +7,6 @@ import ParticipatedEvents from '../pages/ParticipatedEvents';
 import Students from '../pages/Students';
 import AdminHome from '../pages/AdminHome';
 import AddEvent from '../pages/AddEvent';
-import UpdateEvent from '../pages/UpdateEvent';
 import Error404 from '../pages/Error404';
 import AddModerator from '../pages/AddModerator';
 import OtpVerify from '../pages/OtpVerify';
@@ -39,7 +38,6 @@ function AppRoutes() {
 				<Route exact path='/admin' element={<AdminHome />}></Route>
 				<Route exact path='/admin/add' element={<AddEvent />}></Route>
 				<Route exact path='/admin/addmod' element={<AddModerator />}></Route>
-				<Route exact path='/admin/update/:id' element={<UpdateEvent />}></Route>
 				<Route path='*' element={<Error404 />}></Route>
 			</Route>
 		</Routes>

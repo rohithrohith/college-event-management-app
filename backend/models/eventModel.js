@@ -13,8 +13,22 @@ const eventSchema = mongoose.Schema(
         participants: {
             type: Object,
             default: {
-                total: 0
+                total: 0,
+                CSE: 0,
+                ISE: 0,
+                ECE: 0,
+                ME: 0,
+                AE: 0,
+                MT: 0,
+                EEE: 0,
+                "AI/ML": 0,
+                CIV: 0,
             }
+        },
+        thumbnail: {
+            data: { type: Buffer, required: [true, "Please provide thumbnail"] },
+            contentType: String,
+            name: String
         },
         lastDate: {
             type: Date,

@@ -1,22 +1,32 @@
 import { useParams } from 'react-router-dom';
 import s from '../css/event.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useSelector, useDispatch, connect } from 'react-redux';
 import { getEvent } from '../actions/eventsActions';
-import { displayMsg } from '../utils';
+import { displayMsg, getBase64String } from '../utils';
+import EditEvent from '../components/EditEvent';
 
 function Event() {
 	const { id } = useParams();
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const event = useSelector((state) => state.events.event[0]);
 	const user = useSelector((state) => state.user.currentUser);
 	useEffect(() => {
 		dispatch(getEvent(id));
-	}, []);
+	}, [event]);
+	if (
+		window.location.hash === '#edit' &&
+		user &&
+		user.role === 'ADMIN' &&
+		document.getElementById('edit-window')
+	) {
+		document.getElementById('edit-window').style.display = 'flex';
+	}
 
-	const participate = async (id, branch) => {
+	const participate = async (id, branch, eventOn) => {
 		console.log(id, branch);
 		try {
 			const res = await axios.post(
@@ -24,6 +34,7 @@ function Event() {
 				{
 					eventId: id,
 					branch,
+					eventDate: eventOn,
 				},
 				{
 					headers: {
@@ -31,14 +42,31 @@ function Event() {
 					},
 				}
 			);
+			if (res) {
+				displayMsg('Registered for the event');
+				navigate('/participated');
+			}
 		} catch (err) {
 			displayMsg(err.response.data.message);
 		}
 	};
 	return (
-		<>
+		<div>
 			{event && (
 				<>
+					<div className={s.edit_container} id='edit-window'>
+						<EditEvent event={event} />
+					</div>
+					<div className={s.event_thumb_div}>
+						<img
+							src={`data:${
+								event.thumbnail.contentType
+							};base64,${getBase64String(event.thumbnail.data.data)}`}
+							alt={event.thumbnail.name}
+							className={s.event_thumb_img}
+						/>
+					</div>
+
 					<h1 className={s.event_title}>{event.title}</h1>
 					<hr className={s.divider} />
 					<div className={s.date}>
@@ -52,11 +80,26 @@ function Event() {
 						<button
 							className={s.register_btn}
 							onClick={() => {
-								participate(event._id, user.branch);
+								participate(
+									event._id,
+									user.branch,
+									event.eventOn.split('T')[0]
+								);
 							}}
 						>
 							Participate
 						</button>
+					)}
+					{user && user.role === 'ADMIN' && (
+						<Link
+							to='#edit'
+							className={s.register_btn}
+							onClick={() =>
+								(document.getElementById('edit-window').style.display = 'flex')
+							}
+						>
+							Edit
+						</Link>
 					)}
 				</>
 			)}
@@ -81,7 +124,7 @@ function Event() {
 					</div>
 				</>
 			)}
-		</>
+		</div>
 	);
 }
 

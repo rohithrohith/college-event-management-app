@@ -21,6 +21,7 @@ const initState = {
 		isVerified: null,
 		isApproved: null,
 		branch: null,
+		participatedEvents: null,
 	},
 };
 
@@ -42,24 +43,27 @@ const authReducer = (state = initState, action) => {
 					},
 				};
 				return newState;
+			} else {
+				const newState = {
+					...state,
+					signedIn: {
+						name: action.accountData.name,
+						email: action.accountData.email,
+						role: action.accountData.role,
+						isVerified: action.accountData.isVerified,
+						token: action.accountData.token,
+						participatedEvents: action.accountData.participatedEvents,
+					},
+				};
+				return newState;
 			}
-			const newState = {
-				...state,
-				signedIn: {
-					name: action.accountData.name,
-					email: action.accountData.email,
-					role: action.accountData.role,
-					isVerified: action.accountData.isVerified,
-					token: action.accountData.token,
-				},
-			};
-			return newState;
 		}
 		case VERIFY_OTP: {
 			const newState = {
 				...state,
 				signedIn: { isVerified: action.data.isVerified },
 			};
+			console.log(newState);
 			return newState;
 		}
 		case GET_USER: {

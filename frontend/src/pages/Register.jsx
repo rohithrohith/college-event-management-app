@@ -23,17 +23,18 @@ function Register() {
 			...prevState,
 			[e.target.name]: e.target.value,
 		}));
-		console.log(formData);
 	};
 
 	const submit = (e) => {
 		e.preventDefault();
-		if (formData.password !== formData.confirmPassword)
-			displayMsg("Passwords doesn't match");
+		if (formData.branch === '-select-') displayMsg('Please select the branch');
 		else {
-			dispatch(registerStudent(formData));
+			if (formData.password !== formData.confirmPassword)
+				displayMsg("Passwords doesn't match");
+			else {
+				dispatch(registerStudent(formData));
+			}
 		}
-		console.log(formData);
 	};
 
 	const studentRegisterForm = (
@@ -117,7 +118,7 @@ function Register() {
 						required
 						className={styles.select_input}
 					>
-						<option className={styles.select_option} value=''>
+						<option className={styles.select_option} value='-select-' disabled>
 							-Select-
 						</option>
 						<option className={styles.select_option} value='CSE'>
@@ -146,9 +147,6 @@ function Register() {
 						</option>
 						<option className={styles.select_option} value='CIV'>
 							CIV
-						</option>
-						<option className={styles.select_option} value='MI'>
-							MI
 						</option>
 					</select>
 				</div>

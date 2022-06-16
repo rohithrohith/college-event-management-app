@@ -26,35 +26,61 @@ function Navbar() {
 		<div className='navbar-container'>
 			<nav className='navbar'>
 				<div className='navbar-left'>
-					<Link
-						to='/home'
-						style={{
-							fontSize: '18px',
-							color: 'var(--primary)',
-							fontWeight: 'bold',
-						}}
-					>
-						College Event Management
-					</Link>
+					{user && (user.role === 'MODERATOR' || user.role === 'STUDENT') && (
+						<Link
+							to='/home'
+							style={{
+								fontSize: '18px',
+								color: 'var(--primary)',
+								fontWeight: 'bold',
+							}}
+						>
+							College Event Management
+						</Link>
+					)}
+					{user && user.role === 'ADMIN' && (
+						<Link
+							to='/admin'
+							style={{
+								fontSize: '18px',
+								color: 'var(--primary)',
+								fontWeight: 'bold',
+							}}
+						>
+							College Event Management
+						</Link>
+					)}
 				</div>
 				<div className='navbar-right'>
 					<ul className='nav-list'>
 						{user && user.role === 'MODERATOR' && (
-							<li className='nav-item'>
-								<Link to='/students' className='link'>
-									Students
-								</Link>
-							</li>
+							<>
+								<li className='nav-item'>
+									<Link to='/' className='link'>
+										Home
+									</Link>
+								</li>
+								<li className='nav-item'>
+									<Link to='/students' className='link'>
+										Students
+									</Link>
+								</li>
+							</>
 						)}
 						{user && user.role === 'ADMIN' && (
 							<>
 								<li className='nav-item'>
-									<Link to='/register' className='link'>
+									<Link to='/admin' className='link'>
+										Home
+									</Link>
+								</li>
+								<li className='nav-item'>
+									<Link to='/admin/addmod' className='link'>
 										Add moderator
 									</Link>
 								</li>
 								<li className='nav-item'>
-									<Link to='/register' className='link'>
+									<Link to='/admin/add' className='link'>
 										Add events
 									</Link>
 								</li>

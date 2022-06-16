@@ -10,7 +10,7 @@ function Home() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getEvents());
+		dispatch(getEvents(null));
 	}, []);
 
 	return (

@@ -1,21 +1,22 @@
 import s from '../css/adminHome.module.css';
-import AdminEvent from '../components/AdminEventRow';
+import AdminEventRow from '../components/AdminEventRow';
 import { useEffect } from 'react';
 import { useSelector, useDispatch, connect } from 'react-redux';
 import { getEvents } from '../actions/eventsActions';
+import Pagination from '../components/Pagination';
+import DoughnutChart from '../components/BarChart';
 
 function AdminHome() {
 	const events = useSelector((state) => state.events.events);
+	const eventsCount = useSelector((state) => state.events.eventsCount);
 	const dispatch = useDispatch();
 
-	let sl = 0;
-
 	useEffect(() => {
-		dispatch(getEvents());
+		dispatch(getEvents({ limit: 5, page: 1 }));
 	}, []);
 
 	const sort = (e) => {
-		console.log(e.target.value);
+		dispatch(getEvents({ sort: e.target.value, page: 1, limit: 5 }));
 	};
 	return (
 		<div className={s.admin_home}>
@@ -31,27 +32,64 @@ function AdminHome() {
 					>
 						Sort By:
 					</span>
-					<select id='sort-by' className={s.sort_by_select} onChange={sort}>
-						<option value='title' className={s.sort_option}>
-							Title
+					<select
+						style={{ color: 'grey' }}
+						id='sort-by'
+						className={s.sort_by_select}
+						defaultValue='sort'
+						onChange={sort}
+					>
+						<option
+							style={{ color: 'grey' }}
+							className={s.sort_option}
+							disabled
+						>
+							sort
 						</option>
-						<option value='date' className={s.sort_option}>
-							Date
+						<option value='A-Z' className={s.sort_option}>
+							Title (A-Z)
+						</option>
+						<option value='Z-A' className={s.sort_option}>
+							Title (Z-A)
+						</option>
+						<option value='date-latest' className={s.sort_option}>
+							Date(latest first)
+						</option>
+						<option value='date-oldest' className={s.sort_option}>
+							Date(oldest first)
 						</option>
 					</select>
 				</div>
 			</div>
-			<div className={s.event_list_container}>
-				<div className={s.event_list_head}>
-					<span className={s.column}>Sl.no</span>
-					<span className={s.column}>Title</span>
-					<span className={s.column}>Actions</span>
+			{events.length !== 0 && (
+				<div className={s.event_list_container}>
+					<div className={s.event_list_head}>
+						<span className={s.column}>Sl.no</span>
+						<span className={s.column}>Title</span>
+						<span className={s.column}>Actions</span>
+					</div>
+
+					<div className={s.row}>
+						{events.map((event, index) => (
+							<AdminEventRow
+								style={s}
+								event={event}
+								sl={index + 1}
+								key={event._id}
+							/>
+						))}
+					</div>
 				</div>
-				{events &&
-					events.map((event) => (
-						<AdminEvent style={s} event={event} sl={sl + 1} key={event._id} />
-					))}
-			</div>
+			)}
+
+			{events.length === 0 && (
+				<div className={s.row}>
+					<h3 style={{ color: 'grey', marginTop: '20px' }}>
+						No events show! Create one
+					</h3>
+				</div>
+			)}
+			<Pagination total={eventsCount} limit={5} s={s} />
 		</div>
 	);
 }

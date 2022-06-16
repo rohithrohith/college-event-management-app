@@ -19,3 +19,10 @@ export async function sendOtpMail( email ) {
         console.log( err.response.data.message )
     }
 }
+
+export const getBase64String = ( data ) => {
+    var binary = ''
+    var bytes = [].slice.call( new Uint8Array( data ) )
+    bytes.forEach( ( b ) => binary += String.fromCharCode( b ) )
+    return window.btoa( binary )
+}

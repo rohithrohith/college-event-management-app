@@ -1,15 +1,17 @@
 import s from '../css/participatedEvents.module.css';
 import EventRow from '../components/EventRow';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch, connect } from 'react-redux';
+import { getUser } from '../actions/authActions';
 import { useEffect } from 'react';
 
 function ParticipatedEvents() {
+	const dispatch = useDispatch();
 	const participatedEvents = useSelector(
 		(state) => state.user.currentUser.participatedEvents
 	);
 	useEffect(() => {
-		console.log('PE ', participatedEvents);
-	}, [participatedEvents]);
+		dispatch(getUser());
+	}, []);
 	return (
 		<div>
 			<h1>Events you participated</h1>
@@ -19,7 +21,6 @@ function ParticipatedEvents() {
 					participatedEvents.map((event) => (
 						<EventRow event={event} style={s} key={event.id} />
 					))}
-				{/* {participatedEvents && participatedEvents.map((event) => event.title)} */}
 				{!participatedEvents && (
 					<h2 style={{ color: 'grey' }}>
 						You haven't participated in any events
@@ -30,4 +31,4 @@ function ParticipatedEvents() {
 	);
 }
 
-export default ParticipatedEvents;
+export default connect(null, { getUser })(ParticipatedEvents);

@@ -29,7 +29,8 @@ const studentSchema = mongoose.Schema( {
         default: false
     },
     participatedEvents: {
-        default: []
+        type: Array,
+        default: null
     },
 }, {
     timestamps: true

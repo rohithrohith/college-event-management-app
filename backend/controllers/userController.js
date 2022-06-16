@@ -8,21 +8,26 @@ const studentModel = require( '../models/studentModel' )
 // @route POST /api/users/
 // @desc  Register new users
 const registerUser = asyncHandler( async ( req, res ) => {
-    const { name, email, password, branch, role } = req.body
-    if ( !name || !email || !password || !role ) {
+    const { modName, modEmail, modPassword, branch } = req.body
+    if ( !modName || !modEmail || !modPassword || !branch ) {
         res.status( 400 )
         throw new Error( "Please provide all attributes for registration" )
     }
 
-    const userExists = await User.findOne( { email } )
+    const userExists = await User.findOne( { email: modEmail } )
+    const branchModExists = await User.findOne( { branch } )
     if ( userExists ) {
         res.status( 400 )
         throw new Error( "User already Exists!" )
     }
+    if ( branchModExists ) {
+        res.status( 400 )
+        throw new Error( "Moderator for given branch already exists!" )
+    }
     const salt = await bcrypt.genSalt()
-    const hashedPassword = await bcrypt.hash( password, salt )
+    const hashedPassword = await bcrypt.hash( modPassword, salt )
     const user = await User.create( {
-        name, email, password: hashedPassword, branch, role
+        name: modName, email: modEmail, password: hashedPassword, branch
     } )
 
     if ( user ) {
@@ -31,6 +36,7 @@ const registerUser = asyncHandler( async ( req, res ) => {
             name: user.name,
             email: user.email,
             branch: user.branch,
+            message: 'success'
         } )
     } else {
         res.status( 400 )

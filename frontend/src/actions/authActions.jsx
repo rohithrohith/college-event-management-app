@@ -34,7 +34,6 @@ export const verifyStudent = (otp, email) => async (dispatch) => {
 	let res;
 	try {
 		res = await axios.put(API_URI + 'verify/' + email, { otp });
-		console.log(otp, email);
 		const data = res.data;
 		dispatch({ type: VERIFY_OTP, data });
 	} catch (err) {
@@ -53,7 +52,7 @@ export const registerStudent = (data) => async (dispatch) => {
 		const res = await axios.post(API_URI, data);
 		window.location.pathname = '/';
 	} catch (err) {
-		console.log(err);
+		displayMsg(err.response.data.message);
 	}
 };
 
@@ -71,6 +70,6 @@ export const getUser = () => async (dispatch) => {
 		// 	window.location.pathname = '/';
 		// }
 		// displayMsg(err.response.data.message);
-		console.log(err);
+		displayMsg(err.response.data.message);
 	}
 };
