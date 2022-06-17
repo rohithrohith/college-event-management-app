@@ -1,47 +1,70 @@
 import { Route, Routes } from 'react-router-dom';
 import Landing from '../pages/Landing';
-import Profile from '../pages/Profile';
 import Register from '../pages/Register';
 import Event from '../pages/Event';
 import ParticipatedEvents from '../pages/ParticipatedEvents';
 import Students from '../pages/Students';
 import AdminHome from '../pages/AdminHome';
 import AddEvent from '../pages/AddEvent';
-import Error404 from '../pages/Error404';
+import Error404 from '../pages/error-pages/Error404';
+import Unauth from '../pages/error-pages/Unauth';
 import AddModerator from '../pages/AddModerator';
 import OtpVerify from '../pages/OtpVerify';
 import Home from '../pages/Home';
 import WithNav from './WithNav';
 import WithOutNav from './WithOutNav';
-import Navbar from './Navbar';
+import StudentProtectedRoutes from './protectedRoutes/StudentProtectedRoutes';
+import ModeratorProtectedRoutes from './protectedRoutes/ModeratorProtectedRoutes';
+import AdminProtectedRoutes from './protectedRoutes/AdminProtectedRoutes';
+import { getUser } from '../actions/authActions';
+
+import { useEffect } from 'react';
+import { useDispatch, connect, useSelector } from 'react-redux';
 
 function AppRoutes() {
-	return (
-		<Routes>
-			<Route element={<WithOutNav />}>
-				<Route exact path='/' element={<Landing />}></Route>
-				<Route exact path='/register' element={<Register />}></Route>
-				<Route exact path='/verify/:mail' element={<OtpVerify />}></Route>
-			</Route>
-			<Route element={<WithNav />}>
-				<Route exact path='/home' element={<Home />}></Route>
-				<Route exact path='/profile' element={<Profile />}></Route>
-				<Route exact path='/students' element={<Students />}></Route>
-				<Route
-					exact
-					path='/participated'
-					element={<ParticipatedEvents />}
-				></Route>
-				<Route exact path='/event/:id' element={<Event />}></Route>
+	const dispatch = useDispatch();
+	useEffect(() => {
+		if (localStorage.getItem('token')) dispatch(getUser());
+	}, []);
+	const user = useSelector((state) => state.user.currentUser);
+	if (user) {
+		return (
+			<Routes>
+				<Route element={<WithOutNav />}>
+					<Route exact path='/' element={<Landing />}></Route>
+					<Route exact path='/register' element={<Register />}></Route>
+					<Route exact path='/verify/:mail' element={<OtpVerify />}></Route>
+					<Route path='*' element={<Error404 />}></Route>
+					<Route path='/unauthorized' element={<Unauth />}></Route>
+				</Route>
+				<Route element={<WithNav />}>
+					<Route element={<StudentProtectedRoutes user={user} />}>
+						<Route
+							exact
+							path='/participated'
+							element={<ParticipatedEvents />}
+						></Route>
+					</Route>
+					<Route element={<ModeratorProtectedRoutes user={user} />}>
+						<Route exact path='/students' element={<Students />}></Route>
+					</Route>
+					<Route exact path='/home' element={<Home />}></Route>
+					<Route exact path='/event/:id' element={<Event />}></Route>
 
-				{/* ADMIN ROUTES */}
-				<Route exact path='/admin' element={<AdminHome />}></Route>
-				<Route exact path='/admin/add' element={<AddEvent />}></Route>
-				<Route exact path='/admin/addmod' element={<AddModerator />}></Route>
-				<Route path='*' element={<Error404 />}></Route>
-			</Route>
-		</Routes>
-	);
+					{/* ADMIN ROUTES */}
+					<Route element={<AdminProtectedRoutes user={user} />}>
+						<Route exact path='/admin' element={<AdminHome />}></Route>
+						<Route exact path='/admin/add' element={<AddEvent />}></Route>
+						<Route
+							exact
+							path='/admin/addmod'
+							element={<AddModerator />}
+						></Route>
+					</Route>
+				</Route>
+			</Routes>
+		);
+	}
 }
 
-export default AppRoutes;
+export default connect(null, { getUser })(AppRoutes);

@@ -70,13 +70,7 @@ const registerStudent = asyncHandler( async ( req, res ) => {
     }
 } )
 
-const getStudents = asyncHandler( async ( req, res ) => {
-    const students = await Student.find().select( "-password" )
-    res.status( 200 ).json( students )
-} )
 
-// @route POST /api/students/login/
-// @desc  Verify student account email
 const loginStudent = asyncHandler( async ( req, res ) => {
     const { email, password } = req.body
     if ( !email || !password ) {
@@ -112,8 +106,7 @@ const getProfile = asyncHandler( async ( req, res ) => {
     res.status( 200 ).json( { id: _id, name, email } )
 } )
 
-// @route PUT /api/students/verify/:email
-// @desc  Verify student account email
+
 const verifyStudent = asyncHandler( async ( req, res ) => {
     const { otp } = req.body
     const { email } = req.params
@@ -177,8 +170,6 @@ const sendOtp = asyncHandler( async ( req, res ) => {
 
 } )
 
-// @route GET /api/students/branch/:branch
-// @desc  Get all Students of the branch
 const getBranchStudents = asyncHandler( async ( req, res ) => {
     const { branch } = req.params
     try {
@@ -193,8 +184,6 @@ const getBranchStudents = asyncHandler( async ( req, res ) => {
 
 } )
 
-// @route PUT /api/students/approve/:id
-// @desc  Approve students
 const approveStudent = asyncHandler( async ( req, res ) => {
     const { id } = req.params
     try {
@@ -236,7 +225,6 @@ const rejectStudent = asyncHandler( async ( req, res ) => {
 
 module.exports = {
     registerStudent,
-    getStudents,
     loginStudent,
     getProfile,
     sendOtp,

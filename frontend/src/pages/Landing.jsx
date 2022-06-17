@@ -81,7 +81,7 @@ function Landing() {
 
 	const signForm = (
 		<div onSubmit={submit} className={styles.form_container}>
-			<form className={styles.form}>
+			<form className={styles.form} name='signin-form'>
 				<div className={styles.form_data}>
 					<label htmlFor='student-email' className={styles.form_label}>
 						E-mail
@@ -118,6 +118,7 @@ function Landing() {
 				</Link>
 				<input
 					type='submit'
+					name='login-submit'
 					value='Sign In'
 					id='student-signin-btn'
 					className={styles.form_btn}
@@ -133,9 +134,9 @@ function Landing() {
 				</div>
 			</div>
 			<div className={styles.top_header}>
-				<Link to='/home' className={styles.appname}>
+				<span to='/home' className={styles.appname}>
 					College Event management
-				</Link>
+				</span>
 			</div>
 			<div className={styles.landing_content}>
 				<div className={styles.form_box}>

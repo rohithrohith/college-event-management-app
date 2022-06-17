@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import styles from '../css/landing.module.css';
 import { useState } from 'react';
 import { useDispatch, connect } from 'react-redux';
@@ -90,7 +89,7 @@ function Register() {
 						htmlFor='student-confirm-password'
 						className={styles.form_label}
 					>
-						Password
+						Confirm password
 					</label>
 					<input
 						type='password'
@@ -104,16 +103,14 @@ function Register() {
 					/>
 				</div>
 				<div className={styles.form_data}>
-					<label
-						htmlFor='student-confirm-password'
-						className={styles.form_label}
-					>
+					<label htmlFor='branch' className={styles.form_label}>
 						Branch
 					</label>
 					<select
 						onChange={change}
 						name='branch'
 						id='branch'
+						type='select'
 						defaultValue={branch}
 						required
 						className={styles.select_input}
@@ -162,9 +159,9 @@ function Register() {
 	return (
 		<div style={{ height: '100%' }}>
 			<div className={styles.top_header}>
-				<Link to='/home' className={styles.appname}>
-					Event management
-				</Link>
+				<span to='/' className={styles.appname}>
+					College Event management
+				</span>
 			</div>
 
 			<div className={styles.register_content}>

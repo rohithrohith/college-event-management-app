@@ -4,7 +4,6 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch, connect } from 'react-redux';
 import { getEvents } from '../actions/eventsActions';
 import Pagination from '../components/Pagination';
-import DoughnutChart from '../components/BarChart';
 
 function AdminHome() {
 	const events = useSelector((state) => state.events.events);
@@ -61,7 +60,7 @@ function AdminHome() {
 					</select>
 				</div>
 			</div>
-			{events.length !== 0 && (
+			{events && (
 				<div className={s.event_list_container}>
 					<div className={s.event_list_head}>
 						<span className={s.column}>Sl.no</span>
@@ -81,10 +80,33 @@ function AdminHome() {
 					</div>
 				</div>
 			)}
+			{!events && (
+				<h2
+					style={{
+						color: 'white',
+						borderRadius: '5px',
+						marginTop: '10px',
+						padding: '10px',
+						background: 'grey',
+					}}
+					id='loading-text'
+				>
+					Loading Events...
+				</h2>
+			)}
 
-			{events.length === 0 && (
+			{events && events.length === 0 && (
 				<div className={s.row}>
-					<h3 style={{ color: 'grey', marginTop: '20px' }}>
+					<h3
+						style={{
+							color: 'white',
+							borderRadius: '5px',
+							marginTop: '10px',
+							padding: '10px',
+							background: 'grey',
+						}}
+						id='noevent-text'
+					>
 						No events show! Create one
 					</h3>
 				</div>

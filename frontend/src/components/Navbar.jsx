@@ -30,7 +30,7 @@ function Navbar() {
 						<Link
 							to='/home'
 							style={{
-								fontSize: '18px',
+								fontSize: '20px',
 								color: 'var(--primary)',
 								fontWeight: 'bold',
 							}}
@@ -42,12 +42,17 @@ function Navbar() {
 						<Link
 							to='/admin'
 							style={{
-								fontSize: '18px',
+								fontSize: '20px',
 								color: 'var(--primary)',
 								fontWeight: 'bold',
 							}}
 						>
 							College Event Management
+							<small
+								style={{ color: 'black', fontSize: '12px', marginLeft: '10px' }}
+							>
+								admin
+							</small>
 						</Link>
 					)}
 				</div>
@@ -107,6 +112,7 @@ function Navbar() {
 													fontSize: '18px',
 													marginTop: '2px',
 													marginRight: '5px',
+													color: 'black',
 												}}
 											/>
 											<span style={{ margin: '2px 0', display: 'block' }}>

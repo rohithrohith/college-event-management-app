@@ -1,6 +1,6 @@
 import { FETCH_EVENTS, FETCH_EVENT } from '../actions/types';
 
-const initState = { events: [], event: {}, eventsCount: 0 };
+const initState = { events: null, event: null, eventsCount: 0 };
 
 const eventsReducer = (state = initState, action) => {
 	switch (action.type) {

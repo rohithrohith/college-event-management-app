@@ -8,16 +8,20 @@ function AdminEventRow({ style, event, sl }) {
 		document.getElementById('stats-container-' + id).style.display = 'flex';
 	};
 
-	const showBarChart = () => {
-		document.getElementById('line-chart').classList.add(`${style.hide_chart}`);
+	const showBarChart = (id) => {
 		document
-			.getElementById('bar-chart')
+			.getElementById('line-chart-' + id)
+			.classList.add(`${style.hide_chart}`);
+		document
+			.getElementById('bar-chart-' + id)
 			.classList.remove(`${style.hide_chart}`);
 	};
-	const showLineChart = () => {
-		document.getElementById('bar-chart').classList.add(`${style.hide_chart}`);
+	const showLineChart = (id) => {
 		document
-			.getElementById('line-chart')
+			.getElementById('bar-chart-' + id)
+			.classList.add(`${style.hide_chart}`);
+		document
+			.getElementById('line-chart-' + id)
 			.classList.remove(`${style.hide_chart}`);
 	};
 
@@ -68,19 +72,28 @@ function AdminEventRow({ style, event, sl }) {
 					<div className={style.stats_body}>
 						<div
 							className={`${style.barchart_container} ${style.hide_chart}`}
-							id='bar-chart'
+							id={`bar-chart-${event._id}`}
 						>
 							<BarChart data={event.participants} />
 						</div>
-						<div className={style.linechart_container} id='line-chart'>
+						<div
+							className={style.linechart_container}
+							id={`line-chart-${event._id}`}
+						>
 							<LineChart data={event.participants} />
 						</div>
 					</div>
 					<div className={style.stats_footer}>
-						<button className={style.stats_footer_btn} onClick={showLineChart}>
+						<button
+							className={style.stats_footer_btn}
+							onClick={() => showLineChart(event._id)}
+						>
 							Line chart
 						</button>
-						<button className={style.stats_footer_btn} onClick={showBarChart}>
+						<button
+							className={style.stats_footer_btn}
+							onClick={() => showBarChart(event._id)}
+						>
 							Bar chart
 						</button>
 					</div>

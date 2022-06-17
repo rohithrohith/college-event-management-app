@@ -1,6 +1,6 @@
 .recent_events {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: repeat(3, 1fr);
 	margin-top: 10px;
 	background: #f8f8f8;
 }
@@ -62,4 +62,16 @@
 
 .event_icon {
 	margin-left: 5px;
+}
+
+@media (max-width: 650px) {
+	.recent_events {
+		grid-template-columns: 1fr !important;
+	}
+}
+
+@media (max-width: 1024px) {
+	.recent_events {
+		grid-template-columns: repeat(2, 1fr);
+	}
 }

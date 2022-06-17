@@ -65,11 +65,18 @@ export const getUser = () => async (dispatch) => {
 		});
 		dispatch({ type: GET_USER, user: res.data });
 	} catch (err) {
-		// if (err.response.data.message === 'Not authorized!') {
-		// 	displayMsg(err.response.data.message);
-		// 	window.location.pathname = '/';
-		// }
-		// displayMsg(err.response.data.message);
-		displayMsg(err.response.data.message);
+		let msg = null;
+		try {
+			msg = err.response.data.message;
+		} catch (err2) {
+			msg = err.message;
+		}
+
+		if (msg === 'Not authorized!') {
+			console.log(msg);
+			window.location.pathname = '/';
+		} else if (msg === 'Network Error') {
+			displayMsg(msg);
+		}
 	}
 };

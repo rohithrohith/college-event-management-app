@@ -13,11 +13,11 @@ function OtpVerify() {
 	const { email } = useParams();
 
 	useEffect(() => {
-		if (userData.isVerified == null) {
+		if (userData.isVerified === null) {
 			navigate('/');
-		} else if (userData.isVerified == false) {
+		} else if (userData.isVerified === false) {
 			navigate('/verify/' + userData.email);
-		} else if (userData.isVerified == true) {
+		} else if (userData.isVerified === true) {
 			displayMsg('E-mail verified login now');
 			navigate('/');
 		}
@@ -50,6 +50,7 @@ function OtpVerify() {
 							<input
 								type='text'
 								pattern='[0-9]'
+								title='otpnumberone'
 								onChange={change}
 								placeholder='0'
 								maxLength='1'
@@ -62,6 +63,7 @@ function OtpVerify() {
 								type='text'
 								pattern='[0-9]'
 								placeholder='0'
+								title='otpnumbertwo'
 								maxLength='1'
 								className={s.otp_input}
 								onChange={change}
@@ -71,6 +73,7 @@ function OtpVerify() {
 							<input
 								type='text'
 								pattern='[0-9]'
+								title='otpnumberthree'
 								placeholder='0'
 								maxLength='1'
 								className={s.otp_input}
@@ -82,6 +85,7 @@ function OtpVerify() {
 								type='text'
 								pattern='[0-9]'
 								placeholder='0'
+								title='otpnumberfour'
 								maxLength='1'
 								className={s.otp_input}
 								name='otp4'

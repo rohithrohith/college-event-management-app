@@ -20,6 +20,7 @@
 
 .link {
 	font-size: 14px;
+	text-align: center;
 	display: flex;
 	align-content: center;
 	position: relative;
@@ -54,8 +55,12 @@
 	display: flex;
 	user-select: none;
 	text-transform: capitalize;
-	text-decoration: underline;
+	border-radius: 3px;
+	border: var(--primary) solid 1px;
+	padding: 5px;
 	font-weight: bold;
+	color: white;
+	background: var(--primary);
 	font-size: 14px;
 	align-items: center;
 	position: relative;
@@ -98,4 +103,20 @@ hr {
 .logout-btn:hover {
 	background: var(--primary);
 	color: white;
+}
+
+@media (max-width: 700px) {
+	.navbar {
+		flex-direction: column;
+		padding: 10px;
+	}
+
+	.nav-item {
+		margin: 10px;
+		margin-top: 15px;
+	}
+	.nav-link {
+		font-size: 12px;
+		display: block;
+	}
 }

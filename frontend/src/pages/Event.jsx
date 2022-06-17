@@ -12,7 +12,7 @@ function Event() {
 	const { id } = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const event = useSelector((state) => state.events.event[0]);
+	const event = useSelector((state) => state.events.event);
 	const user = useSelector((state) => state.user.currentUser);
 	useEffect(() => {
 		dispatch(getEvent(id));
@@ -27,7 +27,6 @@ function Event() {
 	}
 
 	const participate = async (id, branch, eventOn) => {
-		console.log(id, branch);
 		try {
 			const res = await axios.post(
 				'http://localhost:5500/api/events/participate',
@@ -52,63 +51,76 @@ function Event() {
 	};
 	return (
 		<div>
-			{event && (
-				<>
-					<div className={s.edit_container} id='edit-window'>
-						<EditEvent event={event} />
-					</div>
-					<div className={s.event_thumb_div}>
-						<img
-							src={`data:${
-								event.thumbnail.contentType
-							};base64,${getBase64String(event.thumbnail.data.data)}`}
-							alt={event.thumbnail.name}
-							className={s.event_thumb_img}
-						/>
-					</div>
+			{event &&
+				event.map((event) => (
+					<div key={event._id}>
+						<div className={s.edit_container} id='edit-window'>
+							<EditEvent event={event} />
+						</div>
+						<div className={s.event_thumb_div}>
+							<img
+								src={`data:${
+									event.thumbnail.contentType
+								};base64,${getBase64String(event.thumbnail.data.data)}`}
+								alt={event.thumbnail.name}
+								className={s.event_thumb_img}
+							/>
+						</div>
 
-					<h1 className={s.event_title}>{event.title}</h1>
-					<hr className={s.divider} />
-					<div className={s.date}>
-						<b>Event on: {event.eventOn.split('T')[0]}</b>
+						<h1 className={s.event_title}>{event.title}</h1>
+						<hr className={s.divider} />
+						<div className={s.date}>
+							<b>Event on: {event.eventOn.split('T')[0]}</b>
+						</div>
+						<div className={s.date}>
+							<b>Last date to register: {event.lastDate.split('T')[0]}</b>
+						</div>
+						<div className={s.event_desc}>{event.description}</div>
+						{user && user.role === 'STUDENT' && (
+							<button
+								className={s.register_btn}
+								onClick={() => {
+									participate(
+										event._id,
+										user.branch,
+										event.eventOn.split('T')[0]
+									);
+								}}
+							>
+								Participate
+							</button>
+						)}
+						{user && user.role === 'ADMIN' && (
+							<Link
+								to='#edit'
+								className={s.register_btn}
+								onClick={() =>
+									(document.getElementById('edit-window').style.display =
+										'flex')
+								}
+							>
+								Edit
+							</Link>
+						)}
 					</div>
-					<div className={s.date}>
-						<b>Last date to register: {event.lastDate.split('T')[0]}</b>
+				))}
+			{!event && (
+				<>
+					<div>
+						<h1 style={{ color: 'rgba(0,0,0,0.7)' }}>Loading event...</h1>
 					</div>
-					<div className={s.event_desc}>{event.description}</div>
-					{user && user.role === 'STUDENT' && (
-						<button
-							className={s.register_btn}
-							onClick={() => {
-								participate(
-									event._id,
-									user.branch,
-									event.eventOn.split('T')[0]
-								);
-							}}
-						>
-							Participate
-						</button>
-					)}
-					{user && user.role === 'ADMIN' && (
-						<Link
-							to='#edit'
-							className={s.register_btn}
-							onClick={() =>
-								(document.getElementById('edit-window').style.display = 'flex')
-							}
-						>
-							Edit
-						</Link>
-					)}
 				</>
 			)}
-			{!event && (
+			{event && event.length === 0 && (
 				<>
 					<div>
 						<h1 style={{ color: 'rgba(0,0,0,0.7)' }}>Event not found</h1>
 						<Link
-							to={'/home'}
+							to={
+								user.role === 'STUDENT' || user.role === 'MODERATOR'
+									? '/home'
+									: '/admin'
+							}
 							style={{
 								display: 'block',
 								padding: '10px',

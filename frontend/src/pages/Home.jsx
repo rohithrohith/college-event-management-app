@@ -24,7 +24,11 @@ function Home() {
 							events.map((event) => (
 								<Event style={s} event={event} key={event._id} />
 							))}
-						{!events && <h2>Loading...</h2>}
+						{!events && (
+							<h2 style={{ color: 'grey', padding: '10px' }}>
+								Loading Events...
+							</h2>
+						)}
 					</div>
 				</>
 			)}
@@ -58,7 +62,11 @@ function Home() {
 							events.map((event) => (
 								<Event style={s} event={event} key={event._id} />
 							))}
-						{!events && <h2>Loading...</h2>}
+						{!events && (
+							<h2 style={{ color: 'grey', padding: '10px' }}>
+								Loading Events...
+							</h2>
+						)}
 					</div>
 				</>
 			)}

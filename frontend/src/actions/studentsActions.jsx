@@ -14,6 +14,6 @@ export const getBranchStudents = (branch) => async (dispatch) => {
 			dispatch({ type: GET_BRANCH_STUDENTS, students: students.data });
 		}
 	} catch (err) {
-		displayMsg(err);
+		displayMsg(err.response.data.message);
 	}
 };

@@ -5,10 +5,6 @@ const EventParticipants = require( '../models/eventParticipantModel' )
 const Student = require( '../models/studentModel' )
 const fs = require( 'fs' )
 
-
-
-
-// @route GET /api/events
 const getEvents = asyncHandler( async ( req, res ) => {
     let sortOptions = { createdAt: -1 }
     if ( req.query.sort == "createdAt" ) {
@@ -23,7 +19,6 @@ const getEvents = asyncHandler( async ( req, res ) => {
 
 } )
 
-// @route PUT /api/events
 const insertEvent = asyncHandler( async ( req, res ) => {
     const { title, description, eventOn, lastDate } = req.body
     const filename = req.file.filename
@@ -45,7 +40,6 @@ const insertEvent = asyncHandler( async ( req, res ) => {
     res.status( 201 ).json( event )
 } )
 
-// @route PUT /api/events/:id
 const updateEvent = asyncHandler( async ( req, res ) => {
     const event = await Event.findById( req.params.id )
     if ( !event ) {
@@ -55,19 +49,6 @@ const updateEvent = asyncHandler( async ( req, res ) => {
 
     const updatedEvent = await Event.findByIdAndUpdate( req.params.id, req.body, { new: true } )
     res.json( updatedEvent )
-} )
-
-// @route DELETE /api/events/:id
-const deleteEvent = asyncHandler( async ( req, res ) => {
-    const event = await Event.findById( req.params.id )
-    if ( !event ) {
-        res.status( 404 )
-        throw new Error( "Event not found!" )
-    }
-
-    await event.remove()
-
-    res.json( { id: `${req.params.id}` } )
 } )
 
 const getOneEvent = asyncHandler( async ( req, res ) => {
@@ -89,9 +70,10 @@ const participate = asyncHandler( async ( req, res ) => {
         res.status( 400 )
         throw new Error( "Already participating in this event!" )
     }
-    const { title, _id, eventOn, lastDate, participants } = await Event.findById( eventId ).select( "-description" )
+    const { title, _id, eventOn, lastDate, participants } = await Event.findById( eventId ).select( "-description" ).select( "-thumbnail" )
     const ifEventsOverlap = await EventParticipants.find( { userId, eventOn: eventDate } )
-    if ( ifEventsOverlap ) {
+    console.log( ifEventsOverlap )
+    if ( ifEventsOverlap.length !== 0 ) {
         res.status( 400 )
         throw new Error( "Cant participate in two events happening on the same day" )
     }
@@ -99,7 +81,7 @@ const participate = asyncHandler( async ( req, res ) => {
     const updatedEvent = { ...participants, total: parseInt( participants.total ) + 1, [`${branch}`]: participants[`${branch}`] == null ? 1 : parseInt( participants[`${branch}`] ) + 1 }
     const addPartcipation = await Event.findByIdAndUpdate( eventId, { participants: updatedEvent }, { new: true } )
     const updateStudent = await Student.findByIdAndUpdate( userId, { $push: { participatedEvents: { $each: [{ title, id: _id, eventOn, lastDate }] } } } )
-    res.status( 200 ).json( updatedEvent )
+    res.status( 200 ).send( "Registeration successful" )
 
 } )
 
@@ -108,7 +90,6 @@ module.exports = {
     getEvents,
     insertEvent,
     updateEvent,
-    deleteEvent,
     getOneEvent,
     participate
 }
