@@ -7,13 +7,13 @@ A simple application for management of the events hosted by the it. Built with n
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/rohithrohith/college-event-management-app
 ```
 
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd "Alive-College Event Management App"
 ```
 
 Install dependencies
