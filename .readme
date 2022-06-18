@@ -20,6 +20,8 @@ Install dependencies
 
 ```bash
   npm install
+  cd frontend
+  npm install
 ```
 
 Start the server
@@ -27,6 +29,14 @@ Start the server
 ```bash
   npm run server
 ```
+
+Start frontend
+
+```bash
+  npm run client
+```
+
+## Run app
 
 ```bash
   npm run start
