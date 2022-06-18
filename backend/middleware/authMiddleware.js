@@ -52,4 +52,15 @@ const studentAction = ( req, res, next ) => {
 
 }
 
-module.exports = { protect, adminAction, studentAction }
+
+const moderatorAction = ( req, res, next ) => {
+    if ( req.user.role && req.user.role === "MODERATOR" )
+        next()
+    else {
+        res.status( 401 )
+        throw new Error( "This action can only performed by moderator" )
+    }
+
+}
+
+module.exports = { protect, adminAction, studentAction, moderatorAction }
