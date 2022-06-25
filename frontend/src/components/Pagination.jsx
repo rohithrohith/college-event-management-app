@@ -27,18 +27,18 @@ function Pagination({ limit, total, s = {} }) {
 		<>
 			<ul className={s.page_list}>
 				{pageNumbers.map((page, index) => {
-					if (page === 1) {
-						return (
-							<button
-								onClick={changePage}
-								className={`${s.page_btn} ${s.current_page}`}
-								id={`page-${page}`}
-								key={index}
-							>
-								<li className={s.page_number}>{page}</li>
-							</button>
-						);
-					}
+					return (
+						<button
+							onClick={changePage}
+							className={
+								page === 1 ? `${s.page_btn} ${s.current_page}` : s.page_btn
+							}
+							id={`page-${page}`}
+							key={index}
+						>
+							<li className={s.page_number}>{page}</li>
+						</button>
+					);
 				})}
 			</ul>
 		</>

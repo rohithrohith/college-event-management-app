@@ -2,6 +2,7 @@ import { FaChevronDown } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 function StudentList({ style, student }) {
+	console.log(student.participatedEvents);
 	const showDetails = ({ id }) => {
 		document
 			.getElementById(`details-${id}`)
@@ -33,17 +34,29 @@ function StudentList({ style, student }) {
 				</div>
 			</div>
 			<div className={style.participated_events} id={`details-${student._id}`}>
+				<h4
+					style={{
+						borderTop: '1px solid var(--dark)',
+						borderBottom: '1px solid var(--dark)',
+						padding: '5px 0',
+						marginTop: '2px',
+					}}
+				>
+					Participated Events
+				</h4>
 				<ol className={style.events_list}>
-					<h4>Participated Events</h4>
-					{student.participated_event &&
-						student.participated_event.map((event) => (
-							<li>
-								<Link to='/event/1' className={style.participated_event}>
-									event.title
+					{student.participatedEvents.length !== 0 &&
+						student.participatedEvents.map((event) => (
+							<li key={event._id}>
+								<Link
+									to={`/event/${event._id}`}
+									className={style.participated_event}
+								>
+									{event.title}
 								</Link>
 							</li>
 						))}
-					{!student.participated_event && (
+					{student.participatedEvents.length === 0 && (
 						<h5 style={{ color: 'grey' }}>
 							Haven't participated in any events!
 						</h5>

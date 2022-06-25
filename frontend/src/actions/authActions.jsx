@@ -1,6 +1,7 @@
 import { STORE_USER, VERIFY_OTP, GET_USER } from './types';
 import axios from 'axios';
 import { displayMsg } from '../utils';
+import Navigate from 'react-router-dom';
 const API_URI = 'http://localhost:5500/api/students/';
 
 export const signinUser = (user) => {
@@ -74,6 +75,7 @@ export const getUser = () => async (dispatch) => {
 
 		if (msg === 'Not authorized!') {
 			console.log(msg);
+			if (localStorage.getItem('token')) localStorage.removeItem('token');
 			window.location.pathname = '/';
 		} else if (msg === 'Network Error') {
 			displayMsg(msg);

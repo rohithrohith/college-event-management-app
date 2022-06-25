@@ -11,11 +11,11 @@ function AdminHome() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(getEvents({ limit: 5, page: 1 }));
+		dispatch(getEvents({ limit: 3, page: 1 }));
 	}, []);
 
 	const sort = (e) => {
-		dispatch(getEvents({ sort: e.target.value, page: 1, limit: 5 }));
+		dispatch(getEvents({ sort: e.target.value, page: 1, limit: 3 }));
 	};
 	return (
 		<div className={s.admin_home}>
@@ -111,7 +111,7 @@ function AdminHome() {
 					</h3>
 				</div>
 			)}
-			<Pagination total={eventsCount} limit={5} s={s} />
+			<Pagination total={eventsCount} limit={3} s={s} />
 		</div>
 	);
 }

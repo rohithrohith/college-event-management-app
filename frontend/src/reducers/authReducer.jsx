@@ -17,7 +17,7 @@ const initState = {
 	currentUser: {
 		name: null,
 		email: null,
-		role: null,
+		role: ' ',
 		isVerified: null,
 		isApproved: null,
 		branch: null,

@@ -89,10 +89,7 @@ span {
 }
 
 .events_list {
-	list-style-type: none;
-	margin-top: 5px;
-	padding: 5px 0;
-	border-top: 1px solid var(--dark);
+	margin: 10px 0 10px 15px;
 }
 
 .participated_events {

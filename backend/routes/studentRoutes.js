@@ -4,7 +4,7 @@ const { registerStudent, loginStudent, approveStudent, getProfile, verifyStudent
 const { protect, moderatorAction } = require( '../middleware/authMiddleware' )
 
 router.post( '/', registerStudent )
-router.get( '/branch/:branch', protect, getBranchStudents )
+router.get( '/branch/:branch', protect, moderatorAction, getBranchStudents )
 router.post( '/login', loginStudent )
 router.post( '/otp', sendOtp )
 router.put( '/verify/:email', verifyStudent )

@@ -16,6 +16,7 @@ function AddEvent() {
 	});
 
 	const loadFile = (event) => {
+		console.log(event.target.files[0]);
 		var reader = new FileReader();
 		reader.onload = function () {
 			var output = document.getElementById('output');
@@ -39,40 +40,53 @@ function AddEvent() {
 
 	const submit = async (e) => {
 		e.preventDefault();
-		if (formData.description.split(' ').length < 100) {
-			displayMsg('Description must contain 100 words!');
-		} else {
-			const data = new FormData();
-			data.append('title', formData.title);
-			data.append('description', formData.description);
-			data.append('eventOn', formData.eventOn);
-			data.append('lastDate', formData.lastDate);
-			data.append('eventThumb', formData.eventThumb);
-			try {
-				const res = await axios.post(
-					`http://localhost:5500/api/events/`,
-					data,
-					{
-						headers: {
-							Authorization: `Bearer ${localStorage.getItem('token')}`,
-						},
+		if (
+			parseInt(new Date(formData.lastDate).getTime()) <
+				parseInt(new Date().getTime()) ||
+			parseInt(new Date(formData.eventOn).getTime()) <
+				parseInt(new Date().getTime()) ||
+			parseInt(new Date(formData.lastDate).getTime()) >
+				parseInt(new Date(formData.eventOn).getTime())
+		)
+			displayMsg('Events date sequence is wrong!');
+		else {
+			if (formData.description.split(' ').length < 100) {
+				displayMsg('Description must contain 100 words!');
+			} else {
+				const data = new FormData();
+				data.append('title', formData.title);
+				data.append('description', formData.description);
+				data.append('eventOn', formData.eventOn);
+				data.append('lastDate', formData.lastDate);
+				data.append('eventThumb', formData.eventThumb);
+				try {
+					const res = await axios.post(
+						`http://localhost:5500/api/events/`,
+						data,
+						{
+							headers: {
+								Authorization: `Bearer ${localStorage.getItem('token')}`,
+							},
+						}
+					);
+					if (res) {
+						displayMsg(`Event ${formData.title} added successfully`);
+						setFormData({
+							title: '',
+							description: '',
+							lastDate: '',
+							eventOn: '',
+							eventThumb: '',
+						});
+						document.getElementById('event-thumb').value = '';
+						document.getElementById('output').src = '';
+						document.getElementById('file-choose-text').textContent =
+							'Choose thumbnail';
+						document.getElementById('preview-text').style.display = 'none';
 					}
-				);
-				if (res) {
-					setFormData({
-						title: '',
-						description: '',
-						lastDate: '',
-						eventOn: '',
-						eventThumb: '',
-					});
-					document.getElementById('output').src = '';
-					document.getElementById('file-choose-text').textContent =
-						'Choose thumbnail';
-					document.getElementById('preview-text').style.display = 'none';
+				} catch (err) {
+					displayMsg(err);
 				}
-			} catch (err) {
-				displayMsg(err);
 			}
 		}
 	};
@@ -116,7 +130,7 @@ function AddEvent() {
 					></textarea>
 				</div>
 				<div className={s.form_data}>
-					<label htmlFor='event-desc' className={s.form_label}>
+					<label htmlFor='event-thumb' className={s.form_label}>
 						Add Thumbnail
 					</label>
 					<div className={s.file_input_container}>
@@ -129,8 +143,8 @@ function AddEvent() {
 							required
 							name='eventThumb'
 							className={s.file_input}
-							onInput={loadFile}
-							id='event-desc'
+							onChange={loadFile}
+							id='event-thumb'
 						/>
 					</div>
 					<span

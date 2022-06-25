@@ -1,12 +1,12 @@
 import { Outlet, Navigate } from 'react-router-dom';
 
 function AdminProtectedRoutes({ user }) {
-	if (user.role === 'ADMIN') return <Outlet />;
-	else if (user.role === 'STUDENT')
+	if (user === 'ADMIN') return <Outlet />;
+	else if (user === 'STUDENT')
 		return <Navigate to='/unauthorized' replace={true} />;
-	else if (user.role === 'MODERATOR')
+	else if (user === 'MODERATOR')
 		return <Navigate to='/unauthorized' replace={true} />;
-	else if (!user.role) return <Navigate to='/unauthorized' replace={true} />;
+	else if (!user) return <Navigate to='/unauthorized' replace={true} />;
 }
 
 export default AdminProtectedRoutes;

@@ -27,7 +27,12 @@ function AppRoutes() {
 		if (localStorage.getItem('token')) dispatch(getUser());
 	}, []);
 	const user = useSelector((state) => state.user.currentUser);
-	if (user) {
+	if (
+		user.role === 'STUDENT' ||
+		user.role === 'ADMIN' ||
+		user.role === 'MODERATOR' ||
+		user.role === ' '
+	) {
 		return (
 			<Routes>
 				<Route element={<WithOutNav />}>
@@ -38,21 +43,21 @@ function AppRoutes() {
 					<Route path='/unauthorized' element={<Unauth />}></Route>
 				</Route>
 				<Route element={<WithNav />}>
-					<Route element={<StudentProtectedRoutes user={user} />}>
+					<Route element={<StudentProtectedRoutes user={user.role} />}>
 						<Route
 							exact
 							path='/participated'
 							element={<ParticipatedEvents />}
 						></Route>
 					</Route>
-					<Route element={<ModeratorProtectedRoutes user={user} />}>
+					<Route element={<ModeratorProtectedRoutes user={user.role} />}>
 						<Route exact path='/students' element={<Students />}></Route>
 					</Route>
 					<Route exact path='/home' element={<Home />}></Route>
 					<Route exact path='/event/:id' element={<Event />}></Route>
 
 					{/* ADMIN ROUTES */}
-					<Route element={<AdminProtectedRoutes user={user} />}>
+					<Route element={<AdminProtectedRoutes user={user.role} />}>
 						<Route exact path='/admin' element={<AdminHome />}></Route>
 						<Route exact path='/admin/add' element={<AddEvent />}></Route>
 						<Route
