@@ -73,8 +73,10 @@ const authReducer = (state = initState, action) => {
 					name: action.user.name,
 					email: action.user.email,
 					role: action.user.role,
-					isVerified: action.user.isVerified,
-					isApproved: action.user.isApproved,
+					isVerified:
+						action.user.role === 'STUDENT' ? action.user.isVerified : true,
+					isApproved:
+						action.user.role === 'STUDENT' ? action.user.isApproved : true,
 					branch: action.user.branch,
 					participatedEvents:
 						action.user.role === 'STUDENT'

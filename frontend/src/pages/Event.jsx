@@ -52,6 +52,7 @@ function Event() {
 	return (
 		<div>
 			{event &&
+				user.isApproved &&
 				event.map((event) => (
 					<div key={event._id}>
 						<div className={s.edit_container} id='edit-window'>
@@ -104,6 +105,16 @@ function Event() {
 						)}
 					</div>
 				))}
+			{event && !user.isApproved && (
+				<>
+					<div>
+						<h1 style={{ color: 'rgba(0,0,0,0.7)' }}>
+							Please wait till your branch moderator approves your account to
+							view events.
+						</h1>
+					</div>
+				</>
+			)}
 			{!event && (
 				<>
 					<div>
